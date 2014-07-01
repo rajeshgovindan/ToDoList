@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+
+        body {
+            margin : 10px
+        }
+
+        div {
+            padding: 10px;
+        }
+        div#TaskScreen {
+            display: inline-block;
+            border: 1px solid blue;
+            width  : 30%
+        }
+
+        div#TasksGrid {
+            display: inline-block;
+            border: 1px solid blue;
+            width  : 60%
+        }
+
+        .heading {
+            font : bold  large arial ;
+            text-align   : center ;
+            
+        }
+        .caption {
+            font : bold medium arial;
+            text-align :left 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="Layout">
+        <div id="TaskScreen">
+            <p class="heading">Task Management</p>
+            <div id="TaskName" >
+                <label id ="TaskNameLabel" class="caption">Task Name :</label>
+                <input id="TaskNameTextBox"  />
+            </div>
+            <div id="TaskDescription" ></div>
+
+        </div>
+        <div id="TasksGrid">
+            <p class="heading">Task List</p>
+        </div>
+    </div>
+</body>
+</html>
