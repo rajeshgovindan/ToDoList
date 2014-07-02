@@ -2,36 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <link rel="stylesheet" type="text/css" href="styles/dashboard.css">
     <style>
 
-        body {
-            margin : 10px
-        }
-
-        div {
-            padding: 10px;
-        }
-        div#TaskScreen {
-            display: inline-block;
-            border: 1px solid blue;
-            width  : 30%
-        }
-
-        div#TasksGrid {
-            display: inline-block;
-            border: 1px solid blue;
-            width  : 60%
-        }
-
-        .heading {
-            font : bold  large arial ;
-            text-align   : center ;
-            
-        }
-        .caption {
-            font : bold medium arial;
-            text-align :left 
-        }
+        
     </style>
 </head>
 <body>
@@ -41,14 +15,38 @@
             <p class="heading">Task Management</p>
             <div id="TaskName" >
                 <label id ="TaskNameLabel" class="caption">Task Name :</label>
-                <input id="TaskNameTextBox"  />
+                <input id="taskNameTextBox"  />
             </div>
-            <div id="TaskDescription" ></div>
+            <div id="TaskDescription" >
+                <label id ="taskDescriptionLabel" class="caption" >Description :</label>
+                <textarea id="taskDescriptionTextArea"></textarea>
+            </div>
+            <div id="DueDate" >
+                <label id ="dueDateLabel" class="caption">Due on :</label>
+                <input id="dueDateTextBox"  />
+            </div>
+            <div id="Status" >
+                <label id ="statusLabel" class="caption">Status:</label>
+                <input id="statusTextBox"  />
+            </div>
+
+            <div id="Button" >
+                <button id="saveButton" >Save</button>
+            </div>
 
         </div>
-        <div id="TasksGrid">
+        <div id="TasksGrid" >
             <p class="heading">Task List</p>
+            <table>
+                <tr>
+                    <th>TaskName</th>
+                    <th>Date</th>
+                    <th>Due on</th>
+                    <th>Status</th>
+                </tr>
+            </table>
         </div>
     </div>
 </body>
+    <script src="scripts\taskScript.js"></script>
 </html>
