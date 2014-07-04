@@ -57,6 +57,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="scripts\extension.js" />
+    <Content Include="scripts\storage.js" />
+    <Content Include="scripts\taskGrid.js" />
     <Content Include="scripts\taskScript.js" />
     <Content Include="styles\dashboard.css" />
     <Content Include="ToDoList.html" />
