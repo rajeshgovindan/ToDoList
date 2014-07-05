@@ -15,9 +15,9 @@ function Task(name, description, dueDate) {
 };
 
 Task.prototype.generateId = function(){
-    this.id = 1;
+    this.id = taskStorage().NextId();
 };
-Task.prototype.Save = function(){
+Task.prototype.save = function(){
     var task = {id : this.id,
         name : this.name,
         description : this.description,
@@ -27,12 +27,28 @@ Task.prototype.Save = function(){
     }
     //taskStorage.setItem("ToDOTask", task);
     var taskDb = taskStorage("task");
-    taskDb.Add(task);
+    var taskIndex = taskDb.getIndex(task.id); 
+    if (taskIndex >= 0) {
+        taskDb.update(taskIndex, task);
+    }
+    else {
+        taskDb.Add(task);
+    }
 };
 
 //View
 var view = {
+    TaskManagement: function () {
+        return  {
+            clear : function(){
+                document.getElementById("taskNameTextBox").value = "";
+                document.getElementById("taskDescriptionTextArea").value = "";
+                document.getElementById("dueDateTextBox").value = "";
+            }
 
+        }
+        
+    },
     readInputValue: function () {
        
         var taskName = document.getElementById("taskNameTextBox").value;
@@ -40,6 +56,12 @@ var view = {
         var taskDueDate = document.getElementById("dueDateTextBox").value;
         return  new Task(taskName, taskDescription, taskDueDate);
 
+    },
+
+    setTaskData : function(task){
+        document.getElementById("taskNameTextBox").value = task.name;
+        document.getElementById("taskDescriptionTextArea").value = task.description;
+        document.getElementById("dueDateTextBox").value = task.dueDate.toShortString();
     },
     displayTasks: function (tasks) {
         var taskGridTable = document.getElementById("taskGridTable");
@@ -60,18 +82,50 @@ var view = {
 //Controller
 function taskController() {
     var dbStorage = taskStorage("task");
+    var tasks = dbStorage.get();
     return {
 
         getById: function (taskId) {
+            
+            for (var taskIndex in tasks) {
+                if (tasks[taskIndex].id == taskId) {
+                    return tasks[taskIndex];
+                };
+            };
+            return [];
         },
         getAll: function () {
-            return dbStorage.get();
+            return tasks;
         },
-        save: function (task) {
+       
+        save : function(){
+            var task = {id : this.id,
+                name : this.name,
+                description : this.description,
+                dueDate : this.dueDate,
+                taskDate : this.taskDate,
+                status : this.status
+            }
+            //taskStorage.setItem("ToDOTask", task);
+            var taskDb = taskStorage("task");
+            var taskIndex = taskDB.getIndex(task.id); 
+            if (taskIndex >= 0) {
+                taskDb.update(taskIndex, task);
+            }
+            else {
+                taskDb.Add(task);
+            }
         },
         statusUpdate: function (taskId, status) {
+            var taskIndex = dbStorage.getIndex(taskId);
+            if (taskIndex >= 0) {
+                var task = tasks[taskIndex];
+                if (task != null) {
+                    task.status = status;
+                    dbStorage.update(taskIndex,task);
+                }
+            }
         },
-
     };
 };
 
@@ -86,10 +140,19 @@ function init() {
 
 function saveButton_clicked(){
     var task = view.readInputValue();
-    task.Save();
+    task.save();
     view.displayTasks(taskController().getAll());
+    view.TaskManagement().clear();
 };
 
+function taskRowEdit_Clicked(taskId) {
+    view.setTaskData(taskController().getById(taskId));
+};
+
+function taskRowCompleted_Clicked(taskId) {
+    taskController().statusUpdate(taskId, "Completed");
+    view.displayTasks(taskController().getAll());
+};
 
 var grid = {
     Header : "<tr><th>TaskName</th><th>Date</th><th>Due on</th><th>Status</th></tr>",
@@ -98,6 +161,8 @@ var grid = {
         row = row + "<td>" + task.taskDate.toShortString() + "</td>";
         row = row + "<td>" + task.dueDate.toShortString() + "</td>";
         row = row + "<td>" + task.status + "</td>";
+        row = row + "<td><a href='#'onclick=taskRowEdit_Clicked(" + task.id + ")>Edit</a></td>";
+        row = row + "<td><a href='#'onclick=taskRowCompleted_Clicked(" + task.id + ")>Complete</a></td>";
         row = row + "</tr>";
         return row ;
     },
@@ -109,7 +174,7 @@ function TestView_readInputvalue() {
 
     alert("called js function ");
     var task = view.readInputValue();
-    task.Save();
+    task.save();
 
 };
 
@@ -124,7 +189,7 @@ function TestView_displayTasks() {
 
 function TestModel_Task_Save() {
     var task = new Task("Task3", "Description 3", new Date("07/31/2014"));
-    task.Save(task);
+    task.save(task);
 };
 
 function TestController_GetAll() {
@@ -137,6 +202,6 @@ function TestController_GetAll() {
 
 window.onload = init;
 //TestView_displayTasks();
-//localStorage.removeItem("task");
+// localStorage.clear();
 //TestModel_Task_Save();
 //TestController_GetAll();

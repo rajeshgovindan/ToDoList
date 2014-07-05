@@ -30,15 +30,42 @@ function taskStorage(key) {
     return {
 
         Add: function (task) {
+           // tasks = getItem(key);
             tasks.push(task);
             setItem(key, tasks);
         },
         get: function () {
-            var tasks = getItem(key);
+            //var tasks = getItem(key);
             if (tasks === null) {
                 tasks = [];
             };
             return tasks;
+        },
+        update: function (taskIndex, task) {
+            //var tasks = getItem(key);
+            tasks[taskIndex] = task;
+            setItem(key, tasks);
+        },
+        getIndex: function (taskId) {
+            //var tasks = getItem(key);
+            for (var task in tasks) {
+                if (tasks[task].id == taskId) {
+                    return task;
+                }
+            };
+            return -1;
+        },
+        NextId: function () {
+            var id = getItem("MaxId");
+            if (id === null) {
+                id = 0;
+            };
+
+            id = id + 1;
+
+            setItem("MaxId", id);
+            return id;
+
         }
 
     };
