@@ -1,13 +1,22 @@
 ﻿
+/*
+Method to set object in local storage. the value will be seralized to json string and store in local storage.
+*/
 function setItem(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
 };
 
+/*
+Method to get Item from local storage. Parse the json string and convert it to object.
+While serializing the date property will be stored as string , dateConvertor convert the date string to date object while parsing the json string.
+*/
 function getItem(key) {
     return JSON.parse(localStorage.getItem(key), dateConvertor("dueDate","taskDate"));
 };
 
-
+/* 
+Accepts multiple column names (date) to convert from string to date
+*/
 function dateConvertor(keyNames)
 {
     var args = Array.prototype.slice.call(arguments);
@@ -21,6 +30,9 @@ function dateConvertor(keyNames)
     }
 }
 
+/* 
+Method wraps  the storage methods (setItem and getItem) to store and retrieve the data from local storage.
+*/
 function taskStorage(key) {
 
     var tasks = getItem(key);
@@ -72,13 +84,3 @@ function taskStorage(key) {
 };
 
 
-//var taskStorage = {
-//    setItem: function (key, value) {
-//        localStorage.setItem(key, JSON.stringify(value));
-//    },
-//    getItem: function (key) {
-//        return JSON.parse(localStorage.getItem(key));
-//    },
-//    removeItem: function (key) {
-//    }
-//};
